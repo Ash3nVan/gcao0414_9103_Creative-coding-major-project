@@ -19,8 +19,9 @@ function setup() {
   unitWidth = width / 16;  // Calculate the unit width based on canvas width.
   unitHeight = unitWidth / 4; // Calculate the unit height as a quarter of the unit width.
   noStroke(); // Disable drawing strokes.
-  noLoop(); // Ensure that the draw loop does not loop.
   createComposition(); // Call the function to create the composition.
+  frameRate(1); // Set the frame rate to 1 to call draw() every second
+  // noLoop(); // Remove this to allow looping
 }
 
 function draw() {
@@ -87,8 +88,9 @@ function generateRectangle() {
   let widthInUnits, heightInUnits;
   let attempts = 0;
   while (attempts < 100) {
-    widthInUnits = randomInteger(3, 10) / 2;
-    heightInUnits = randomInteger(3, 10) / 2;
+    // Adjust these numbers to increase the potential size of the rectangles
+    widthInUnits = randomInteger(4, 15) / 2;
+    heightInUnits = randomInteger(4, 15) / 2;
     // Make sure the rectangle does not meet certain conditions that are not allowed.
     if (!((widthInUnits == 1 && heightInUnits == 1) || (widthInUnits >= 4 && heightInUnits >= 4))) {
       let x0 = randomInteger(spacingMargin, 32 - spacingMargin - widthInUnits + 1) * unitWidth;
