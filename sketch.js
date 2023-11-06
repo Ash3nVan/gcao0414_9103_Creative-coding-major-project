@@ -2,10 +2,10 @@ let spacingMargin = 2 * 2; // Set the margin for the spacing.
 let unitWidth, unitHeight; // Declare the unit width and height for rectangles.
 let backgroundColor = [255, 252, 242]; // Define the background color.
 let colorPalette = [ // Define the color palette.
-  [5, 5, 5],       // Dark color
-  [43, 103, 175],  // Blue color
-  [239, 86, 47],   // Red color
-  [242, 234, 193], // Light color
+  // [5, 5, 5],       // Dark color
+  // [43, 103, 175],  // Blue color
+  // [239, 86, 47],   // Red color
+  // [242, 234, 193], // Light color
 ];
 let mainColor = [249, 213, 49]; // Define the main color used in the composition.
 
@@ -14,22 +14,48 @@ let rectanglesList = []; // Array to store the rectangle objects.
 // Function to generate a random integer between 'a' and 'b'.
 let randomInteger = (a, b) => floor(random(a, b));
 
+let lastUpdateTime = 0; // Variable to keep track of the last update time
+
+
 function setup() {
-  createCanvas(windowWidth, windowHeight); // Set up the canvas size.
-  unitWidth = width / 16;  // Calculate the unit width based on canvas width.
-  unitHeight = unitWidth / 4; // Calculate the unit height as a quarter of the unit width.
-  noStroke(); // Disable drawing strokes.
-  createComposition(); // Call the function to create the composition.
+  createCanvas(windowWidth, windowHeight);
+  unitWidth = width / 16;
+  unitHeight = unitWidth / 4;
+  noStroke();
   frameRate(1); // Set the frame rate to 1 to call draw() every second
   // noLoop(); // Remove this to allow looping
 }
 
 function draw() {
-  background(backgroundColor); // Set the background color.
-  translate(-width / 2 - unitHeight / 2, -height / 2 - unitHeight / 2); // Center the composition.
-  for (let recta of rectanglesList) {
-    recta.display(); // Display each rectangle.
+  // Check if at least one second has passed
+  if (millis() - lastUpdateTime > 1000) {
+    lastUpdateTime = millis(); // Update the last update time
+
+    // Generate a new color palette
+    colorPalette = generateNewColorPalette();
+    
+    // Clear the list of rectangles
+    rectanglesList = [];
+    
+    // Create a new composition with the new color palette
+    createComposition();
   }
+
+  background(backgroundColor);
+  translate(-width / 2 - unitHeight / 2, -height / 2 - unitHeight / 2);
+
+  for (let recta of rectanglesList) {
+    recta.display();
+  }
+}
+
+// This function generates a new color palette with random colors
+function generateNewColorPalette() {
+  let newPalette = [];
+  for (let i = 0; i < 4; i++) {
+    newPalette.push([random(0, 255), random(0, 255), random(0, 255)]);
+  }
+  return newPalette;
 }
 
 // This function creates the overall composition of rectangles.
@@ -87,9 +113,9 @@ function createComposition() {
 function generateRectangle() {
   let widthInUnits, heightInUnits;
   let attempts = 0;
-  while (attempts < 100) {
+  while (attempts < 100) { 
     // Adjust these numbers to increase the potential size of the rectangles
-    widthInUnits = randomInteger(4, 15) / 2;
+    widthInUnits = randomInteger(4, 15) / 2; 
     heightInUnits = randomInteger(4, 15) / 2;
     // Make sure the rectangle does not meet certain conditions that are not allowed.
     if (!((widthInUnits == 1 && heightInUnits == 1) || (widthInUnits >= 4 && heightInUnits >= 4))) {
@@ -202,3 +228,4 @@ function windowResized() {
   setup(); // Re-setup the sketch with the new window size.
   draw(); // Redraw the composition.
 }
+
